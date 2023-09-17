@@ -24,3 +24,4 @@ class ModeratorAndObjectCreatorAllow(BasePermission):
             return True
         if request.user == obj.creator:
             return True
+        return False
