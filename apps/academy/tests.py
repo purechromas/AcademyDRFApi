@@ -40,7 +40,6 @@ class TestCourseEndPoints(APITestCase):
 
         pk = list_response.json()['results'][0]['id']
         url = reverse('course:retrieve', kwargs={'pk': pk})
-
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -50,7 +49,6 @@ class TestCourseEndPoints(APITestCase):
 
         pk = list_response.json()['results'][0]['id']
         url = reverse('course:update', kwargs={'pk': pk})
-
         response = self.client.put(path=url, data={'name': 'Course Test2', 'description': 'test2'})
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -61,7 +59,6 @@ class TestCourseEndPoints(APITestCase):
 
         pk = list_response.json()['results'][0]['id']
         url = reverse('course:delete', kwargs={'pk': pk})
-
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
