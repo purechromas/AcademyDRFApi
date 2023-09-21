@@ -7,6 +7,7 @@ class Course(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('name'))
     description = models.TextField(**NULLABLE, verbose_name=_('description'))
     preview = models.ImageField(**NULLABLE, upload_to='courses/previews', verbose_name=_('preview'))
+    price = models.PositiveIntegerField(verbose_name=_('price'))
 
     creator = models.ForeignKey(
         User, related_name='courses', on_delete=models.DO_NOTHING, verbose_name=_('course creator')
@@ -14,6 +15,9 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+    def is_user_subscribed(self, user):
+        return Subscription.objects.filter(course=self, user=user).exists()
 
     class Meta:
         verbose_name = _('Course')
@@ -27,8 +31,7 @@ class Lesson(models.Model):
     preview = models.ImageField(**NULLABLE, upload_to='lessons/previews', verbose_name=_('preview'))
 
     course = models.ForeignKey(
-        Course, related_name='lessons', on_delete=models.DO_NOTHING, verbose_name=_('course')
-    )
+        Course, related_name='lessons', on_delete=models.DO_NOTHING, verbose_name=_('course'))
     creator = models.ForeignKey(
         User, related_name='lessons', on_delete=models.DO_NOTHING, verbose_name=_('lesson creator')
     )
@@ -39,3 +42,17 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = _('Lesson')
         verbose_name_plural = _('Lessons')
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        to=User, on_delete=models.CASCADE, related_name='descriptions', verbose_name=_('user'))
+    course = models.ForeignKey(
+        to=Course, on_delete=models.CASCADE, related_name='descriptions', verbose_name=_('course'))
+
+    def __str__(self):
+        return f'User : {self.user} \n Course: {self.course}'
+
+    class Meta:
+        verbose_name = _('Subscription')
+        verbose_name_plural = _('Subscriptions')

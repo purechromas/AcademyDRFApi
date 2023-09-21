@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from apps.academy.models import Course, Lesson
+from apps.academy.models import Course, Lesson, Subscription
+from apps.academy.validators import OnlyYouTubeUrlAllow
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -15,6 +16,12 @@ class CourseSerializer(serializers.ModelSerializer):
     lessons_quantity = serializers.SerializerMethodField(read_only=True)
     lessons = LessonSerializer(read_only=True, many=True)
     creator = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    is_subscribed = serializers.SerializerMethodField(read_only=True)
+
+
+    def get_is_subscribed(self, course):
+        user = self.context['request'].user
+        return course.is_user_subscribed(user=user)
 
     @staticmethod
     def get_lessons_quantity(course):
@@ -22,5 +29,13 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('id', 'name', 'preview', 'description', 'lessons', 'lessons_quantity', 'creator')
+        fields = (
+            'id', 'name', 'preview', 'description', 'price', 'lessons', 'lessons_quantity', 'creator',
+            'is_subscribed')
+        validators = [OnlyYouTubeUrlAllow(field='description')]
 
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = ('user', 'course')

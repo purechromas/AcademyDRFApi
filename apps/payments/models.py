@@ -6,16 +6,17 @@ from apps.users.models import User, NULLABLE
 
 
 class Payment(models.Model):
-    class MethodPayment(models.TextChoices):
-        cash = ('cash', _('cash'))
-        card_transfer = ('card_transfer', _('card transfer'))
+    class Status(models.TextChoices):
+        LOADING = ('loading', _('loading'))
+        CANCEL = ('cancel', _('cancel'))
+        SUCCESS = ('success', _('success'))
 
-    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_('amount'))
-    method_payment = models.CharField(choices=MethodPayment.choices, verbose_name=_('method payment'))
-    datetime_payment = models.DateTimeField(auto_now=True, verbose_name=_('datetime payment'))
-
+    amount = models.PositiveIntegerField(verbose_name=_('amount')) # euro cents 1500 = 15.00 euro
+    status = models.CharField(choices=Status.choices, default=Status.LOADING)
+    verify_payment_number = models.PositiveIntegerField(verbose_name=_('verify payment number'))
+    datetime = models.DateTimeField(auto_now=True, verbose_name=_('datetime'))
     creator = models.ForeignKey(
-        to=User, related_name='payments', on_delete=models.DO_NOTHING, verbose_name=_('user')
+        to=User, related_name='payments', on_delete=models.DO_NOTHING, verbose_name=_('creator')
     )
     course_payment = models.ForeignKey(
         to=Course, **NULLABLE, related_name='payments', on_delete=models.DO_NOTHING, verbose_name=_('course payment')
