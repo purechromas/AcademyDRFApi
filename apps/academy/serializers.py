@@ -30,7 +30,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = (
-            'id', 'name', 'preview', 'description', 'lessons', 'lessons_quantity', 'creator',
+            'id', 'name', 'preview', 'description', 'price', 'lessons', 'lessons_quantity', 'creator',
             'is_subscribed')
         validators = [OnlyYouTubeUrlAllow(field='description')]
 

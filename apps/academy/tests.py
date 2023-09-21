@@ -13,13 +13,12 @@ class TestCourseEndPoints(APITestCase):
 
         token_url = reverse('user:token_obtain_pair')
         resp_token = self.client.post(
-            path=token_url,
-            data={'email': 'test@gmail.com', 'password': 'test'})
+            path=token_url, data={'email': 'test@gmail.com', 'password': 'test'})
         token = resp_token.json().get('access')
 
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
-        self.client.post(reverse('course:create'),
-                         {'name': 'Course Test', 'description': 'test'})
+        self.client.post(
+            reverse('course:create'), {'name': 'Course Test', 'description': 'test'})
 
     def test_course_create_endpoint(self):
         course_create_url = reverse('course:create')
@@ -62,5 +61,3 @@ class TestCourseEndPoints(APITestCase):
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-

@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt',
+
     'apps.users.apps.UsersConfig',
     'apps.academy.apps.AcademyConfig',
     'apps.payments.apps.PaymentsConfig',
@@ -154,3 +156,6 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+STRIPE_SECRET_API_KEY = os.getenv('STRIPE_SECRET_API_KEY')
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_API_KEY')

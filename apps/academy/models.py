@@ -7,6 +7,7 @@ class Course(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('name'))
     description = models.TextField(**NULLABLE, verbose_name=_('description'))
     preview = models.ImageField(**NULLABLE, upload_to='courses/previews', verbose_name=_('preview'))
+    price = models.PositiveIntegerField(verbose_name=_('price'))
 
     creator = models.ForeignKey(
         User, related_name='courses', on_delete=models.DO_NOTHING, verbose_name=_('course creator')
