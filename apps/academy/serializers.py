@@ -9,7 +9,9 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = ('id', 'name', 'preview', 'description', 'course', 'creator')
+        fields = [
+            'id', 'name', 'preview', 'description', 'course', 'creator'
+        ]
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -18,6 +20,13 @@ class CourseSerializer(serializers.ModelSerializer):
     creator = serializers.HiddenField(default=serializers.CurrentUserDefault())
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
+    class Meta:
+        model = Course
+        fields = [
+            'id', 'name', 'preview', 'description', 'price', 'lessons', 'lessons_quantity', 'creator', 'is_subscribed'
+        ]
+        extra_kwargs = {"is_subscribed": {"read_only": True}}
+        validators = (OnlyYouTubeUrlAllow(field='description'),)
 
     def get_is_subscribed(self, course):
         user = self.context['request'].user
@@ -27,15 +36,10 @@ class CourseSerializer(serializers.ModelSerializer):
     def get_lessons_quantity(course):
         return course.lessons.all().count()
 
-    class Meta:
-        model = Course
-        fields = (
-            'id', 'name', 'preview', 'description', 'price', 'lessons', 'lessons_quantity', 'creator',
-            'is_subscribed')
-        validators = [OnlyYouTubeUrlAllow(field='description')]
-
 
 class SubscriptionSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Subscription
         fields = ('user', 'course')

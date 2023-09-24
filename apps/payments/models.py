@@ -11,10 +11,11 @@ class Payment(models.Model):
         CANCEL = ('cancel', _('cancel'))
         SUCCESS = ('success', _('success'))
 
-    amount = models.PositiveIntegerField(verbose_name=_('amount')) # euro cents 1500 = 15.00 euro
+    amount = models.PositiveIntegerField(verbose_name=_('amount'))  # CENTS/KOPECKS
     status = models.CharField(choices=Status.choices, default=Status.LOADING)
     verify_payment_number = models.PositiveIntegerField(verbose_name=_('verify payment number'))
     datetime = models.DateTimeField(auto_now=True, verbose_name=_('datetime'))
+
     creator = models.ForeignKey(
         to=User, related_name='payments', on_delete=models.DO_NOTHING, verbose_name=_('creator')
     )

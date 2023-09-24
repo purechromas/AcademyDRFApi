@@ -18,13 +18,12 @@ class TestCourseEndPoints(APITestCase):
 
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
         self.client.post(
-            reverse('course:create'), {'name': 'Course Test', 'description': 'test'})
+            reverse('course:create'), {'name': 'Course Test', 'description': 'test', 'price': 100})
 
     def test_course_create_endpoint(self):
         course_create_url = reverse('course:create')
-        course_data = {'name': 'Course Test1', 'description': 'test1'}
+        course_data = {'name': 'Course Test1', 'description': 'test1', 'price': 200}
         response = self.client.post(course_create_url, course_data, format='json')
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_course_list_endpoint(self):
