@@ -1,5 +1,5 @@
 from rest_framework.filters import OrderingFilter
-from rest_framework import response, status
+from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import CreateAPIView, ListAPIView, get_object_or_404
 from rest_framework.permissions import AllowAny
@@ -24,7 +24,8 @@ class PaymentCreateAPIView(CreateAPIView):
 
 
 class PaymentSuccessAPIView(APIView):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         verify_payment_number = request.query_params.get('verify_payment_number')
         payment = get_object_or_404(Payment, verify_payment_number=verify_payment_number)
 
@@ -36,7 +37,8 @@ class PaymentSuccessAPIView(APIView):
 
 
 class PaymentCancelAPIView(APIView):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         verify_payment_number = request.query_params.get('verify_payment_number')
         payment = get_object_or_404(Payment, verify_payment_number=verify_payment_number)
 
@@ -44,4 +46,5 @@ class PaymentCancelAPIView(APIView):
         payment.save()
 
         response_data = {'message': 'Payment canceled'}
+
         return Response(response_data, status=status.HTTP_200_OK)

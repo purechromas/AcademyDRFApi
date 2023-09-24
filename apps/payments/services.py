@@ -1,10 +1,10 @@
 import random
-
 import stripe
 
 from config import settings
 
 stripe.api_key = settings.STRIPE_SECRET_API_KEY
+
 
 def create_url_payment(data: dict) -> str:
     """Generate a payment url using STRIPE PAYMENT SYSTEM and stripe framework"""
@@ -36,7 +36,4 @@ def create_url_payment(data: dict) -> str:
 
 
 def generate_random_number() -> str:
-    random_number = ''.join(str(random.randint(1, 9)) for _ in range(8))
-
-    return random_number
-
+    return ''.join(str(random.randint(1, 9)) for _ in range(8))

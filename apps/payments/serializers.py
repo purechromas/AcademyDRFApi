@@ -5,23 +5,26 @@ from apps.payments.services import create_url_payment, generate_random_number
 
 class PaymentListSerializer(serializers.ModelSerializer):
     creator_name = serializers.CharField(source='creator.email', read_only=True)
+
     class Meta:
         model = Payment
         fields = [
-        'creator', 'creator_name', 'course_payment', 'lesson_payment', 'amount', 'datetime', 'status'
+            'creator', 'creator_name', 'course_payment', 'lesson_payment', 'amount', 'datetime', 'status'
         ]
+
 
 class PaymentCreateSerializer(serializers.ModelSerializer):
     creator = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    verify_payment_number = serializers.HiddenField(default=generate_random_number)
     status = serializers.CharField(read_only=True)
     datetime = serializers.DateTimeField(read_only=True)
     payment_url = serializers.SerializerMethodField()
-    verify_payment_number = serializers.HiddenField(default=generate_random_number)
 
     class Meta:
         model = Payment
-        fields = ['amount', 'course_payment', 'lesson_payment', 'status', 'datetime', 'creator',
-            'payment_url', 'verify_payment_number',
+        fields = [
+            'amount', 'course_payment', 'lesson_payment', 'status', 'datetime', 'creator', 'payment_url',
+            'verify_payment_number',
         ]
 
     def validate(self, data):
