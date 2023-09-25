@@ -9,9 +9,9 @@ class LessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = [
+        fields = (
             'id', 'name', 'preview', 'description', 'course', 'creator'
-        ]
+        )
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -22,9 +22,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
-        fields = [
+        fields = (
             'id', 'name', 'preview', 'description', 'price', 'lessons', 'lessons_quantity', 'creator', 'is_subscribed'
-        ]
+        )
         extra_kwargs = {"is_subscribed": {"read_only": True}}
         validators = (OnlyYouTubeUrlAllow(field='description'),)
 
@@ -43,4 +43,3 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
         fields = ('user', 'course')
-

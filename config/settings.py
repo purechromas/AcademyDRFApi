@@ -174,11 +174,10 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 # EMAIL SETTINGS
-
-DEFAULT_FROM_EMAIL = 'purechromas@mail.ru'
 EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.mail.ru'
-EMAIL_PORT = '465'
-EMAIL_HOST_USER = 'purechromas@mail.ru'
-EMAIL_HOST_PASSWORD = '6r934yCmuvhWy4CZbLBC'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
