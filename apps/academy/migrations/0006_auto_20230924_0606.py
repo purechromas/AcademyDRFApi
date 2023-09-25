@@ -21,6 +21,7 @@ def create_task(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('django_celery_beat', '0018_improve_crontab_helptext'),
         ('academy', '0005_alter_course_last_update_alter_lesson_created_and_more'),
     ]
 
