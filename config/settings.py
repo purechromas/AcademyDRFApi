@@ -171,6 +171,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'apps.users.tasks.check_user_activity',
         'schedule': timedelta(days=1),
     },
+    'course-update-notification': {
+        'task': 'apps.academy.tasks.course_update_notification',
+        'schedule': timedelta(hours=1),
+    },
 }
 
 # EMAIL SETTINGS
