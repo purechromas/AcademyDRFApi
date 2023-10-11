@@ -14,4 +14,4 @@ ENV PYTHONUNBUFFERED 1
 
 EXPOSE 8000
 
-CMD ["/bin/sh", "-c", "python3 --version && pip --version"]
+CMD python3 --version && pip --version
