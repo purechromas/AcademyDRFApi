@@ -12,6 +12,4 @@ RUN pip install -r /myapp/requirements.txt
 ENV PYTHONDONTWRITEBYCODE 1
 ENV PYTHONUNBUFFERED 1
 
-EXPOSE 8000
 
-CMD python3 --version && pip --version
