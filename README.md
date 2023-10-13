@@ -12,6 +12,6 @@ This Docker image is designed to run your Python application using Python 3.11 o
 
 4. Build the Docker image using the following command:
    ```shell
-   docker build -t my-python-app .
-   docker run -p 8000:8000 my-python-app
+   docker-compose build 
+   docker-compose up
 
