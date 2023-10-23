@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx/academy:/etc/nginx/sites-available/
+
+  postgresql:
+    image: postgres
+    user: postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  drf:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - .:/myapp
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+
+volumes:
+  postgres_data:
+  redis_data:
