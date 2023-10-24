@@ -24,15 +24,13 @@ services:
       timeout: 5s
       retries: 3
 
-  drf:
-    build: .
-    env_file:
-      - .env
+  django_gunicorn:
+    build:
+      context: .
     volumes:
-      - .:/myapp
+      - static:/static
     ports:
-      - "8001:8001"
-    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi --bind 0.0.0.0:8001"
+      - '8000:8000'
     depends_on:
       postgresql:
         condition: service_healthy
@@ -49,5 +47,4 @@ services:
       - django_gunicorn
 
 volumes:
-  postgres_data:
-  redis_data:
+  static:

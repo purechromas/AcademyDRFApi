@@ -1,15 +1,16 @@
-FROM alpine
+FROM python:latest
 
-WORKDIR /myapp
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+ENV LANG C.UTF-8
+ENV PIP_NO_CACHE_DIR=off
+ENV PIP_DISABLE_PIP_VERSION_CHECK=on
+ENV PIP_DEFAULT_TIMEOUT=10
 
-COPY ./requirements.txt .
+WORKDIR /drf
+
 COPY . .
 
-RUN apk update && apk upgrade
-RUN apk add --update --no-cache python3 py3-pip
-RUN pip install -r /myapp/requirements.txt
+RUN pip install -r /drf/requirements.txt
 
-ENV PYTHONDONTWRITEBYCODE 1
-ENV PYTHONUNBUFFERED 1
-
-
+ENTRYPOINT ["sh", "entrypoint.sh"]
