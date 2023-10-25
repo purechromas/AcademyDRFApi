@@ -3,6 +3,7 @@ from django.utils import timezone
 
 from apps.users.models import User
 
+
 @shared_task
 def check_user_activity():
     one_mount_ago = timezone.now() - timezone.timedelta(days=30)

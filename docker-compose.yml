@@ -12,7 +12,7 @@ services:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 2
 
   redis:
     image: redis
@@ -22,15 +22,18 @@ services:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 2
 
   django_gunicorn:
     build:
       context: .
+    env_file:
+      - .env
     volumes:
-      - static:/static
+      - ./static:/drf/static
     ports:
       - '8000:8000'
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi --bind 0.0.0.0:8000"
     depends_on:
       postgresql:
         condition: service_healthy
@@ -38,13 +41,32 @@ services:
         condition: service_healthy
 
   nginx:
-    build: ./nginx
+    image: nginx
     volumes:
-      - static:/static
+      - ./static:/drf/static
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - '80:80'
     depends_on:
       - django_gunicorn
+
+  celery:
+    build: .
+    env_file:
+      - .env
+    command: celery -A config worker -l INFO
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  celery_beat:
+    build: .
+    env_file:
+      - .env
+    command: celery -A config beat -l INFO -S django
+    depends_on:
+     postgresql:
+       condition: service_healthy
 
 volumes:
   static:

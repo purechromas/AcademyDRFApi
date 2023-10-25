@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.10-slim-bookworm
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -11,6 +11,7 @@ WORKDIR /drf
 
 COPY . .
 
+RUN apt-get update && apt-get install -y celery
 RUN pip install -r /drf/requirements.txt
 
-ENTRYPOINT ["sh", "entrypoint.sh"]
+
