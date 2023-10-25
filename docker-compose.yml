@@ -67,6 +67,8 @@ services:
     depends_on:
      postgresql:
        condition: service_healthy
+     celery:
+       condition: service_started
 
 volumes:
   static:
