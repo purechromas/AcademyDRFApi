@@ -15,3 +15,4 @@ RUN apt-get update && apt-get install -y celery
 RUN pip install -r /drf/requirements.txt
 
 
+ENTRYPOINT 'sadsad'

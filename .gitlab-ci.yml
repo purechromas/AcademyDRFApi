@@ -7,4 +7,3 @@ deploy:
     - main
   tags:
     - dev
-
